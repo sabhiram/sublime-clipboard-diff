@@ -13,14 +13,12 @@ env:
         - SUBLIME_TEXT_VERSION="3"
 
 # Define pre-reqs
-before-install:
+before_install:
     # Fetch the travis.sh bootstrapper file from the UnitTesting git repo
     - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
-
-install:
-    # Install coveralls for code coverage goodness
     - pip install coveralls
 
+install:
     # Bootstrap the env
     - sh travis.sh bootstrap
 
