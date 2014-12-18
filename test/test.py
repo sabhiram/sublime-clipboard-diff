@@ -1,7 +1,17 @@
 #!/usr/bin/env python
-
 import unittest
-import select_diff
+import sys, os
+
+"""
+Fix up python path so we can include the module from the
+parent folder.
+
+We don't put the tests and the plugin in the same dir since
+that can make sublime text incorrectly load the "test"
+as the plugin :(
+"""
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+from utils import diff_util
 
 class TestSelectionDiffPlugin(unittest.TestCase):
     """
