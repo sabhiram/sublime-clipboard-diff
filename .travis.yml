@@ -24,7 +24,7 @@ install:
 
 # Define what we want to test
 script: 
-    - sh travis.sh run_tests
+    - coverage run --source select_diff.py sh travis.sh run_tests
 
 after_success:
     - coveralls
