@@ -1,0 +1,19 @@
+# Definition for what type of env TravisCI should setup
+language: python
+python:
+    - "2.7"
+    - "3.3"
+    - "3.4"
+
+# Define pre-reqs
+install:
+    - pip install coveralls
+
+# Define what we want to test
+script: 
+    - "python -m unittest -v test"
+    - coverage run --source select_diff.py test.py
+
+# If tests pass, run the coverage report using coveralls
+after_success:
+    - coveralls
