@@ -1,9 +1,9 @@
-# Definition for what type of env TravisCI should setup
-os:
-    - linux
-    - osx
+language: python
 
 # Define testing environment
+os:
+    - linux
+
 env:
     global:
         # Package to be tested
@@ -14,6 +14,7 @@ env:
 
 # Define pre-reqs
 before_install:
+    - pip install coveralls
     # Fetch the travis.sh bootstrapper file from the UnitTesting git repo
     - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
 
@@ -24,3 +25,6 @@ install:
 # Define what we want to test
 script: 
     - sh travis.sh run_tests
+
+after_success:
+    - coveralls
