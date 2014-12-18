@@ -16,7 +16,6 @@ env:
 before_install:
     # Fetch the travis.sh bootstrapper file from the UnitTesting git repo
     - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
-    - pip install coveralls
 
 install:
     # Bootstrap the env
@@ -25,7 +24,3 @@ install:
 # Define what we want to test
 script: 
     - sh travis.sh run_tests
-
-# If tests pass, run the coverage report using coveralls
-after_success:
-    - coveralls
