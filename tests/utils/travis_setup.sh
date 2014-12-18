@@ -80,7 +80,7 @@ RunTests() {
     if [ -z "$1" ]; then
         coverage run --source select_diff.py "$UT/sbin/run.py" "$PACKAGE"
     else
-        coverage run --source select_diff.py python "$UT/sbin/run.py" "$1" "$PACKAGE"
+        coverage run --source select_diff.py "$UT/sbin/run.py" "$1" "$PACKAGE"
     fi
 }
 
