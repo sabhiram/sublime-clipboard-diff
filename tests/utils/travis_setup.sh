@@ -78,9 +78,9 @@ RunTests() {
     fi
     UT="$STP/UnitTesting"
     if [ -z "$1" ]; then
-        coverage --source select_diff.py "$UT/sbin/run.py" "$PACKAGE"
+        coverage run --source select_diff.py "$UT/sbin/run.py" "$PACKAGE"
     else
-        coverage --source select_diff.py python "$UT/sbin/run.py" "$1" "$PACKAGE"
+        coverage run --source select_diff.py python "$UT/sbin/run.py" "$1" "$PACKAGE"
     fi
 }
 
