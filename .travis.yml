@@ -14,17 +14,19 @@ env:
 
 # Define pre-reqs
 before_install:
-    - pip install coveralls
     # Fetch the travis.sh bootstrapper file from the UnitTesting git repo
-    - curl -OL https://raw.githubusercontent.com/sabhiram/sublime-select-diff/master/tests/utils/travis_setup.sh
+    - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
 
 install:
     # Bootstrap the env
-    - sh travis_setup.sh bootstrap
+    - sh travis.sh bootstrap
 
 # Define what we want to test
 script: 
-    - sh travis_setup.sh run_tests
+    - sh travis.sh run_tests
 
-after_success:
-    - coveralls
+# Dont send emails unless things are blowing up (or getting better)
+notifications:
+    email:
+        on_success: change
+        on_failure: always
