@@ -1,18 +1,32 @@
 # Definition for what type of env TravisCI should setup
-language: python
-python:
-    - "2.7"
-    - "3.3"
-    - "3.4"
+os:
+    - linux
+    - osx
+
+# Define testing environment
+env:
+    global:
+        # Package to be tested
+        - PACKAGE="sublime-select-diff"
+    matrix:
+        - SUBLIME_TEXT_VERSION="2"
+        - SUBLIME_TEXT_VERSION="3"
 
 # Define pre-reqs
+before-install:
+    # Fetch the travis.sh bootstrapper file from the UnitTesting git repo
+    - curl -OL https://raw.githubusercontent.com/randy3k/UnitTesting/master/sbin/travis.sh
+
 install:
+    # Install coveralls for code coverage goodness
     - pip install coveralls
+
+    # Bootstrap the env
+    - sh travis.sh bootstrap
 
 # Define what we want to test
 script: 
-    - "python -m unittest -v test"
-    - coverage run --source select_diff.py test.py
+    - sh travis.sh run_tests
 
 # If tests pass, run the coverage report using coveralls
 after_success:
