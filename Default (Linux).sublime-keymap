@@ -1,0 +1,16 @@
+[
+    {
+        "keys": ["ctrl+c"],
+        "command": "select_diff_copy"
+    },
+
+    { 
+        "keys": ["ctrl+x"],
+        "command": "select_diff_cut"
+    },
+
+    {
+        "keys": ["ctrl+alt+d"],
+        "command": "select_diff"
+    }
+]
