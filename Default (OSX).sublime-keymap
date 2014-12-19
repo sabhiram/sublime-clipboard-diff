@@ -1,16 +1,16 @@
 [
     {
         "keys": ["super+c"],
-        "command": "select_diff_copy"
+        "command": "clipboard_diff_copy"
     },
 
     { 
         "keys": ["super+x"],
-        "command": "select_diff_cut"
+        "command": "clipboard_diff_cut"
     },
 
     {
         "keys": ["super+ctrl+alt+d"],
-        "command": "select_diff"
+        "command": "clipboard_diff"
     }
 ]
