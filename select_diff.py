@@ -67,10 +67,17 @@ def getLinesHelper(line):
     Given a buffer of text, splits it into the appropriate lines while
     maintaining the line break per line
     """
-    all_lines = line.split("\n")
-    lines = [l + "\n" for l in all_lines[:-1]]
-    lines.append(all_lines[-1])
+    all_lines = [l for l in line.split("\n")]
+    lines = [l + "\n" for l in all_lines]
     return lines
+
+def writeLinesToViewHelper(view, edit, lines, index=0):
+    """
+    Helper function to walk a list of lines and emit them to the given view
+    starting at the `index`. Default value of index is 0
+    """
+    for line in lines:
+        index += view.insert(edit, index, line)
 
 def getCurrentBuffer():
     """
@@ -128,50 +135,17 @@ class SelectDiffCommand(sublime_plugin.TextCommand):
         3. Use difflib to compare them
         4. Output this to a new tab (scratch)
         """
-        current_selection = selectionToString(self.view)
-        previous_selection = storedBuffer.get_buffer()
-        diff = difflib.unified_diff(
-                    getLinesHelper(current_selection),
-                    getLinesHelper(previous_selection),
-                    "Clipboard", "Selection")
-
         current_window = self.view.window()
         diff_view = current_window.new_file()
         diff_view.set_scratch(True)
         diff_view.set_name("Select Diff")
         current_window.focus_view(diff_view)
 
-        diff_text = _reduce(lambda acc, x: acc + x, diff, "")
-        diff_view.run_command("insert", { "characters": diff_text })
+        current_selection = selectionToString(self.view)
+        previous_selection = storedBuffer.get_buffer()
+        diff = difflib.unified_diff(
+                    getLinesHelper(previous_selection),
+                    getLinesHelper(current_selection),
+                    "Clipboard", "Selection")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        writeLinesToViewHelper(diff_view, edit, diff, index = 0)

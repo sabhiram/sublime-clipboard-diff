@@ -40,8 +40,8 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     test_lines_0 = "line 0\nline 1\nline 2"
     test_lines_1 = "line A\nline 1"
     diff_result  = difflib.unified_diff(
-                        select_diff.getLinesHelper(test_lines_1),
                         select_diff.getLinesHelper(test_lines_0),
+                        select_diff.getLinesHelper(test_lines_1),
                         "Clipboard", "Selection")
 
     expected_diff_text = _reduce(lambda acc, x: acc + x, diff_result, "")
@@ -88,9 +88,11 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     Tests:
     
     1. Test selected text -> string function
-    2. Test Copy Hook
-    3. Test Cut Hook
-    4. Test Select-Diff Hook
+    2. Test line helper 
+    3. Test line writer to view
+    4. Test Copy Hook
+    5. Test Cut Hook
+    6. Test Select-Diff Hook
     """
     def test_get_selection_str(self):
         """
@@ -105,6 +107,35 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         selection_txt = select_diff.selectionToString(self.test_view)
 
         self.assertEqual(self.test_lines_0, selection_txt)
+
+
+    def test_line_helper(self):
+        """
+        Validates the line helper
+        """
+        lines = select_diff.getLinesHelper(self.test_lines_0)
+
+        self.assertEqual(len(lines), 3)
+        self.assertEqual(lines[0], "line 0\n")
+        self.assertEqual(lines[1], "line 1\n")
+        self.assertEqual(lines[2], "line 2\n")
+
+
+    def test_write_to_view(self):
+        """
+        Validates writing to a view
+        """
+        lines = select_diff.getLinesHelper(self.test_lines_0)
+
+        # TODO: Enable this once we figure out how to pass mock "edit" objects
+        # select_diff.writeLinesToViewHelper(self.test_view, { "edit_token": 0 }, lines)
+
+        self.runSimpleViewCommand("select_all")
+        current_selection = self.test_view.sel()
+        selected_text = select_diff.selectionToString(self.test_view)
+
+        # TODO: Enable this once we figure out how to pass mock "edit" objects
+        # self.assertEqual(self.test_lines_0, selected_text)
 
 
     def test_copy_selection_to_buffer(self):
@@ -124,8 +155,6 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         current_selection = self.test_view.sel()
         
         self.assertEqual(self.test_view.sel(), previous_selection)
-        # TODO: For some odd reason, when I try to fetch the current buffer
-        #       from the lib, it always returns "", debug this...
         self.assertEqual(self.test_lines_0, select_diff.getCurrentBuffer())
         
 
@@ -147,8 +176,6 @@ class TestSelectionDiffPlugin(unittest.TestCase):
 
         self.assertEqual(1, len(current_selection))
         self.assertEqual("", self.test_view.substr(current_selection[0]))
-        # TODO: For some odd reason, when I try to fetch the current buffer
-        #       from the lib, it always returns "", debug this...
         self.assertEqual(self.test_lines_0, select_diff.getCurrentBuffer())
 
 
