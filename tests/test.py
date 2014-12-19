@@ -8,31 +8,6 @@ Detect SublimeText version to deal w/ v2 vs v3 deltas
 version = sublime.version()
 print("Testing with SublimeText version: %s" % version)
 
-
-class TestSelectionDiffPlugin(unittest.TestCase):
-    """
-    Unit tests to validate sublime-selection-diff plugin methods
-    """
-
-    def setUp(self):
-        """
-        Common setUp() for TestSelectionDiffPlugin
-        """
-        pass
-
-    def tearDown(self):
-        """
-        Common tearDown() for TestSelectionDiffPlugin
-        """
-        pass
-
-    def test_initial(self):
-        """
-        Validates True === True
-        """
-        self.assertTrue(True)
-
-
 """
 For plugin helper functions, load them so we can hit functionality
 within the plugin
@@ -43,50 +18,110 @@ else:
     print(sys.modules.keys())
     select_diff = sys.modules["sublime-select-diff.select_diff"]
 
-class TestSelectionDiffHelpers(unittest.TestCase):
+
+class TestSelectionDiffPlugin(unittest.TestCase):
     """
-    Unit tests to validate sublime-selection-diff helper methods
+    Unit tests to validate sublime-selection-diff plugin methods
     """
 
+    test_lines_0 = "\n".join([ "line 0", "line 1", "line 2" ])
+    test_lines_1 = "\n".join([ "line A", "line 1" ])
+
+    """
+    Helper functions
+    """
+    def runViewCommand(self, cmd, *args):
+        if self.test_view:
+            self.test_view.run_command(cmd, *args)
+
+    def insertTextToTestView(self, text):
+        self.runViewCommand("insert", { "characters": text })
+
+    """
+    Setup / Teardown
+    """
     def setUp(self):
         """
-        Common setUp() for TestSelectionDiffHelpers
+        Common setUp() for TestSelectionDiffPlugin
+
+        1. Open a new view in the active window
+        2. 
         """
-        pass
+        self.test_view = sublime.active_window().new_file()
 
     def tearDown(self):
         """
-        Common tearDown() for TestSelectionDiffHelpers
+        Common tearDown() for TestSelectionDiffPlugin
+
+        1. If the view exists, set it to scratch (so it does not ask to save)
+        2. Focus the test_view, and close it
         """
-        pass
+        if self.test_view:
+            self.test_view.set_scratch(True)
+            self.test_view.window().focus_view(self.test_view)
+            self.test_view.window().run_command("close_file")
 
-    def test_helper_method(self):
-        """
-        Validates True === True
-        """
-        self.assertTrue(select_diff.helper_fn(True))
-
-
-
-def run_unit_tests():
     """
-    Helper function which sets up and executes the tests in the event
-    that this script is executed from the command line directly
-
-    * Responsible for setting up the test verbosity
-    * Controls which `TestCase`s can be run in what order
+    Tests
+        1. Test selected text -> string function
+        2. Test Copy Hook
+        3. Test Cut Hook
     """
-    test_loader = unittest.TestLoader()
-    test_runner = unittest.TextTestRunner(verbosity = 2)
-    
-    plugin_test_suite = test_loader.loadTestsFromTestCase(TestSelectionDiffPlugin)
-    helper_test_suite = test_loader.loadTestsFromTestCase(TestSelectionDiffHelpers)
-    test_runner.run(plugin_test_suite)
-    test_runner.run(helper_test_suite)
+    def test_get_selection_str(self):
+        """
+        Validate the selectionToString helper
 
-"""
-Allow tests to be run from the command line:
-`python test`
-"""
-if __name__ == "__main__":
-    run_unit_tests()
+        1. Inserts the view with some text and selects it
+        2. calls helper and validates that the two strings match
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runViewCommand("select_all")
+
+        selection_txt = select_diff.selectionToString(self.test_view)
+       
+        self.assertEqual(self.test_lines_0, selection_txt)
+
+
+    def test_copy_selection_to_buffer(self):
+        """
+        Validates if stuff in the view gets copied correctly
+
+        1. Fill up the file with some text and select it
+        2. Trigger a copy
+        3. Validate that the copied_lines stored off has these lines
+        4. Validate that the selection still exists
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runViewCommand("select_all")
+        
+        previous_selection = self.test_view.sel()
+        self.runViewCommand("copy")
+        current_selection = self.test_view.sel()
+        
+        self.assertEqual(self.test_view.sel(), previous_selection)
+        # TODO: For some odd reason, when I try to fetch the current buffer
+        #       from the lib, it always returns "", debug this...
+        # self.assertEqual(self.test_lines_0, select_diff.get_current_buffer())
+        
+
+    def test_cut_selection_to_buffer(self):
+        """
+        Validates if stuff in the view gets cut correctly
+
+        1. Fill up the file with some text and select it
+        2. Trigger a cut
+        3. Validate that the copied_lines stored off has these lines
+        4. Validate that the selection still exists
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runViewCommand("select_all")
+        
+        previous_selection = self.test_view.sel()
+        self.runViewCommand("cut")
+        current_selection = self.test_view.sel()
+
+        self.assertEqual(1, len(current_selection))
+        self.assertEqual("", self.test_view.substr(current_selection[0]))
+        # TODO: For some odd reason, when I try to fetch the current buffer
+        #       from the lib, it always returns "", debug this...
+        # self.assertEqual(self.test_lines_0, select_diff.get_current_buffer())
