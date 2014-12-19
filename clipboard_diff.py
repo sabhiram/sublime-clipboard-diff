@@ -89,7 +89,7 @@ def getCurrentBuffer():
 """
 Sublime commands that this plugin implements
 """
-class SelectDiffCopyCommand(sublime_plugin.TextCommand):
+class ClipboardDiffCopyCommand(sublime_plugin.TextCommand):
     """
     Fired when the user issues a `copy` so we can remember
     the buffer so we can compare it with whatever is the 
@@ -106,7 +106,7 @@ class SelectDiffCopyCommand(sublime_plugin.TextCommand):
         self.view.run_command("copy")
 
 
-class SelectDiffCutCommand(sublime_plugin.TextCommand):
+class ClipboardDiffCutCommand(sublime_plugin.TextCommand):
     """
     Fired when the user issues a `cut` so we can remember
     the buffer so we can compare it with whatever is the
@@ -123,7 +123,7 @@ class SelectDiffCutCommand(sublime_plugin.TextCommand):
         self.view.run_command("cut")
 
 
-class SelectDiffCommand(sublime_plugin.TextCommand):
+class ClipboardDiffCommand(sublime_plugin.TextCommand):
     """
     Fired when the select-diff key is triggered, will grab
     the current selection, and open a new tab with a diff

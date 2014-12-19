@@ -16,9 +16,9 @@ For plugin helper functions, load them so we can hit functionality
 within the plugin
 """
 if version < "3000":
-    select_diff = sys.modules["select_diff"]
+    clipboard_diff = sys.modules["clipboard_diff"]
 else:
-    select_diff = sys.modules["sublime-select-diff.select_diff"]
+    clipboard_diff = sys.modules["sublime-clipboard-diff.clipboard_diff"]
 
 
 """
@@ -40,8 +40,8 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     test_lines_0 = "line 0\nline 1\nline 2"
     test_lines_1 = "line A\nline 1"
     diff_result  = difflib.unified_diff(
-                        select_diff.getLinesHelper(test_lines_0),
-                        select_diff.getLinesHelper(test_lines_1),
+                        clipboard_diff.getLinesHelper(test_lines_0),
+                        clipboard_diff.getLinesHelper(test_lines_1),
                         "Clipboard", "Selection")
 
     expected_diff_text = _reduce(lambda acc, x: acc + x, diff_result, "")
@@ -104,7 +104,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
 
-        selection_txt = select_diff.selectionToString(self.test_view)
+        selection_txt = clipboard_diff.selectionToString(self.test_view)
 
         self.assertEqual(self.test_lines_0, selection_txt)
 
@@ -113,7 +113,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         """
         Validates the line helper
         """
-        lines = select_diff.getLinesHelper(self.test_lines_0)
+        lines = clipboard_diff.getLinesHelper(self.test_lines_0)
 
         self.assertEqual(len(lines), 3)
         self.assertEqual(lines[0], "line 0\n")
@@ -125,14 +125,14 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         """
         Validates writing to a view
         """
-        lines = select_diff.getLinesHelper(self.test_lines_0)
+        lines = clipboard_diff.getLinesHelper(self.test_lines_0)
 
         # TODO: Enable this once we figure out how to pass mock "edit" objects
-        # select_diff.writeLinesToViewHelper(self.test_view, { "edit_token": 0 }, lines)
+        # clipboard_diff.writeLinesToViewHelper(self.test_view, { "edit_token": 0 }, lines)
 
         self.runSimpleViewCommand("select_all")
         current_selection = self.test_view.sel()
-        selected_text = select_diff.selectionToString(self.test_view)
+        selected_text = clipboard_diff.selectionToString(self.test_view)
 
         # TODO: Enable this once we figure out how to pass mock "edit" objects
         # self.assertEqual(self.test_lines_0, selected_text)
@@ -151,11 +151,11 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.runSimpleViewCommand("select_all")
         
         previous_selection = self.test_view.sel()
-        self.runSimpleViewCommand("select_diff_copy")
+        self.runSimpleViewCommand("clipboard_diff_copy")
         current_selection = self.test_view.sel()
         
         self.assertEqual(self.test_view.sel(), previous_selection)
-        self.assertEqual(self.test_lines_0, select_diff.getCurrentBuffer())
+        self.assertEqual(self.test_lines_0, clipboard_diff.getCurrentBuffer())
         
 
     def test_cut_selection_to_buffer(self):
@@ -171,17 +171,17 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.runSimpleViewCommand("select_all")
         
         previous_selection = self.test_view.sel()
-        self.runSimpleViewCommand("select_diff_cut")
+        self.runSimpleViewCommand("clipboard_diff_cut")
         current_selection = self.test_view.sel()
 
         self.assertEqual(1, len(current_selection))
         self.assertEqual("", self.test_view.substr(current_selection[0]))
-        self.assertEqual(self.test_lines_0, select_diff.getCurrentBuffer())
+        self.assertEqual(self.test_lines_0, clipboard_diff.getCurrentBuffer())
 
 
-    def test_select_diff(self):
+    def test_clipboard_diff(self):
         """
-        Validates the `select_diff` command 
+        Validates the `clipboard_diff` command 
 
         1. Fill up a selection buffer
         2. Select some other stuff
@@ -189,11 +189,11 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
-        self.runSimpleViewCommand("select_diff_cut")
+        self.runSimpleViewCommand("clipboard_diff_cut")
         self.insertTextToTestView(self.test_lines_1)
         self.runSimpleViewCommand("select_all")
 
-        self.runSimpleViewCommand("select_diff")
+        self.runSimpleViewCommand("clipboard_diff")
         diff_view = sublime.active_window().active_view()
         diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
         diff_view.window().run_command("close_file")
