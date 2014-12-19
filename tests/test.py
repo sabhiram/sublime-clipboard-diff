@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 import unittest
+import difflib
 import sys, os, sublime
+
 
 """
 Detect SublimeText version to deal w/ v2 vs v3 deltas
 """
 version = sublime.version()
 print("Testing with SublimeText version: %s" % version)
+
 
 """
 For plugin helper functions, load them so we can hit functionality
@@ -15,17 +18,34 @@ within the plugin
 if version < "3000":
     select_diff = sys.modules["select_diff"]
 else:
-    print(sys.modules.keys())
     select_diff = sys.modules["sublime-select-diff.select_diff"]
 
+
+"""
+Python 2 vs Python 3 - Compatibility - reduce() is functools.reduce
+"""
+try:
+    # Python 2
+    _reduce = reduce
+except NameError:
+    # Python 3
+    import functools
+    _reduce = functools.reduce
 
 class TestSelectionDiffPlugin(unittest.TestCase):
     """
     Unit tests to validate sublime-selection-diff plugin methods
     """
 
-    test_lines_0 = "\n".join([ "line 0", "line 1", "line 2" ])
-    test_lines_1 = "\n".join([ "line A", "line 1" ])
+    test_lines_0 = "line 0\nline 1\nline 2"
+    test_lines_1 = "line A\nline 1"
+    diff_result  = difflib.unified_diff(
+                        select_diff.getLinesHelper(test_lines_1),
+                        select_diff.getLinesHelper(test_lines_0),
+                        "Clipboard", "Selection")
+
+    expected_diff_text = _reduce(lambda acc, x: acc + x, diff_result, "")
+    
 
     """
     Helper functions
@@ -48,6 +68,8 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         2. 
         """
         self.test_view = sublime.active_window().new_file()
+        self.test_view.set_name("Test View")
+        self.test_view.set_scratch(True)
 
     def tearDown(self):
         """
@@ -57,15 +79,18 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         2. Focus the test_view, and close it
         """
         if self.test_view:
-            self.test_view.set_scratch(True)
-            self.test_view.window().focus_view(self.test_view)
-            self.test_view.window().run_command("close_file")
+            test_window = self.test_view.window()
+            test_window.focus_view(self.test_view)
+            test_window.run_command("close_file"),
+            
 
     """
-    Tests
-        1. Test selected text -> string function
-        2. Test Copy Hook
-        3. Test Cut Hook
+    Tests:
+    
+    1. Test selected text -> string function
+    2. Test Copy Hook
+    3. Test Cut Hook
+    4. Test Select-Diff Hook
     """
     def test_get_selection_str(self):
         """
@@ -95,13 +120,13 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.runSimpleViewCommand("select_all")
         
         previous_selection = self.test_view.sel()
-        self.runSimpleViewCommand("copy")
+        self.runSimpleViewCommand("select_diff_copy")
         current_selection = self.test_view.sel()
         
         self.assertEqual(self.test_view.sel(), previous_selection)
         # TODO: For some odd reason, when I try to fetch the current buffer
         #       from the lib, it always returns "", debug this...
-        # self.assertEqual(self.test_lines_0, select_diff.get_current_buffer())
+        self.assertEqual(self.test_lines_0, select_diff.getCurrentBuffer())
         
 
     def test_cut_selection_to_buffer(self):
@@ -117,12 +142,33 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.runSimpleViewCommand("select_all")
         
         previous_selection = self.test_view.sel()
-        self.runSimpleViewCommand("cut")
+        self.runSimpleViewCommand("select_diff_cut")
         current_selection = self.test_view.sel()
 
         self.assertEqual(1, len(current_selection))
         self.assertEqual("", self.test_view.substr(current_selection[0]))
         # TODO: For some odd reason, when I try to fetch the current buffer
         #       from the lib, it always returns "", debug this...
-        # self.assertEqual(self.test_lines_0, select_diff.get_current_buffer())
+        self.assertEqual(self.test_lines_0, select_diff.getCurrentBuffer())
 
+
+    def test_select_diff(self):
+        """
+        Validates the `select_diff` command 
+
+        1. Fill up a selection buffer
+        2. Select some other stuff
+        3. Diff them and check for match
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runSimpleViewCommand("select_all")
+        self.runSimpleViewCommand("select_diff_cut")
+        self.insertTextToTestView(self.test_lines_1)
+        self.runSimpleViewCommand("select_all")
+
+        self.runSimpleViewCommand("select_diff")
+        diff_view = sublime.active_window().active_view()
+        diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
+        diff_view.window().run_command("close_file")
+
+        self.assertEqual(self.expected_diff_text, diff_text)

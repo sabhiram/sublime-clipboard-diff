@@ -62,6 +62,22 @@ def selectionToString(view):
     """
     return _reduce(lambda acc, r : acc + view.substr(r), view.sel(), "")
 
+def getLinesHelper(line):
+    """
+    Given a buffer of text, splits it into the appropriate lines while
+    maintaining the line break per line
+    """
+    all_lines = line.split("\n")
+    lines = [l + "\n" for l in all_lines[:-1]]
+    lines.append(all_lines[-1])
+    return lines
+
+def getCurrentBuffer():
+    """
+    Test helper function which returns the current buffer of stored text
+    """
+    return storedBuffer.get_buffer()
+
 
 """
 Sublime commands that this plugin implements
@@ -115,13 +131,14 @@ class SelectDiffCommand(sublime_plugin.TextCommand):
         current_selection = selectionToString(self.view)
         previous_selection = storedBuffer.get_buffer()
         diff = difflib.unified_diff(
-                    [x + "\n" for x in current_selection.splitlines()],
-                    [x + "\n" for x in previous_selection.splitlines()],
+                    getLinesHelper(current_selection),
+                    getLinesHelper(previous_selection),
                     "Clipboard", "Selection")
 
         current_window = self.view.window()
         diff_view = current_window.new_file()
         diff_view.set_scratch(True)
+        diff_view.set_name("Select Diff")
         current_window.focus_view(diff_view)
 
         diff_text = _reduce(lambda acc, x: acc + x, diff, "")
