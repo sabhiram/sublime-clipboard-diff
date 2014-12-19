@@ -30,12 +30,12 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     """
     Helper functions
     """
-    def runViewCommand(self, cmd, *args):
+    def runSimpleViewCommand(self, cmd):
         if self.test_view:
-            self.test_view.run_command(cmd, *args)
+            self.test_view.run_command(cmd)
 
     def insertTextToTestView(self, text):
-        self.runViewCommand("insert", { "characters": text })
+        self.test_view.run_command("insert", {"characters": text})
 
     """
     Setup / Teardown
@@ -75,10 +75,10 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         2. calls helper and validates that the two strings match
         """
         self.insertTextToTestView(self.test_lines_0)
-        self.runViewCommand("select_all")
+        self.runSimpleViewCommand("select_all")
 
         selection_txt = select_diff.selectionToString(self.test_view)
-       
+
         self.assertEqual(self.test_lines_0, selection_txt)
 
 
@@ -92,10 +92,10 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         4. Validate that the selection still exists
         """
         self.insertTextToTestView(self.test_lines_0)
-        self.runViewCommand("select_all")
+        self.runSimpleViewCommand("select_all")
         
         previous_selection = self.test_view.sel()
-        self.runViewCommand("copy")
+        self.runSimpleViewCommand("copy")
         current_selection = self.test_view.sel()
         
         self.assertEqual(self.test_view.sel(), previous_selection)
@@ -114,10 +114,10 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         4. Validate that the selection still exists
         """
         self.insertTextToTestView(self.test_lines_0)
-        self.runViewCommand("select_all")
+        self.runSimpleViewCommand("select_all")
         
         previous_selection = self.test_view.sel()
-        self.runViewCommand("cut")
+        self.runSimpleViewCommand("cut")
         current_selection = self.test_view.sel()
 
         self.assertEqual(1, len(current_selection))
@@ -125,3 +125,4 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         # TODO: For some odd reason, when I try to fetch the current buffer
         #       from the lib, it always returns "", debug this...
         # self.assertEqual(self.test_lines_0, select_diff.get_current_buffer())
+
