@@ -25,34 +25,6 @@ version = sublime.version()
 
 
 """
-Define the current buffer of lines we wish to compare against.
-
-Note that this will get overwritten any time we hit a copy or cut
-command from the user
-"""
-class StoredBuffer(object):
-    """
-    Constructor takes string construction args and forwards it
-    to the internal buffer
-
-    Reset will re-assign the buffer
-
-    Get will fetch the current one
-    """
-    def __init__(self, *args, **kwargs):
-        self.buffer = str(*args, **kwargs)
-
-    def reset_buffer(self, s):
-        self.buffer = s
-
-    def get_buffer(self):
-        return self.buffer
-
-
-storedBuffer = StoredBuffer("")
-
-
-"""
 Helper functions
 """
 def selectionToString(view):
@@ -79,50 +51,10 @@ def writeLinesToViewHelper(view, edit, lines, index=0):
     for line in lines:
         index += view.insert(edit, index, line)
 
-def getCurrentBuffer():
-    """
-    Test helper function which returns the current buffer of stored text
-    """
-    return storedBuffer.get_buffer()
-
 
 """
 Sublime commands that this plugin implements
 """
-class ClipboardDiffCopyCommand(sublime_plugin.TextCommand):
-    """
-    Fired when the user issues a `copy` so we can remember
-    the buffer so we can compare it with whatever is the 
-    selection buffer
-    """
-    def run(self, edit):
-        """
-        1. Fetch the current selection
-        2. Store it to the `storedBuffer`
-        3. Run the real copy command...
-        """
-        text = selectionToString(self.view)
-        storedBuffer.reset_buffer(text)
-        self.view.run_command("copy")
-
-
-class ClipboardDiffCutCommand(sublime_plugin.TextCommand):
-    """
-    Fired when the user issues a `cut` so we can remember
-    the buffer so we can compare it with whatever is the
-    selection buffer
-    """
-    def run(self, edit):
-        """
-        1. Fetch the current selection
-        2. Store it to the `storedBuffer`
-        3. Run the real cut command...
-        """
-        text = selectionToString(self.view)
-        storedBuffer.reset_buffer(text)
-        self.view.run_command("cut")
-
-
 class ClipboardDiffCommand(sublime_plugin.TextCommand):
     """
     Fired when the select-diff key is triggered, will grab
@@ -131,7 +63,7 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         """
         1. Fetch the current selection
-        2. Fetch the `storedBuffer`
+        2. Fetch the clipboard
         3. Use difflib to compare them
         4. Output this to a new tab (scratch)
         """
@@ -142,7 +74,8 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
         current_window.focus_view(diff_view)
 
         current_selection = selectionToString(self.view)
-        previous_selection = storedBuffer.get_buffer()
+        previous_selection = sublime.get_clipboard()
+
         diff = difflib.unified_diff(
                     getLinesHelper(previous_selection),
                     getLinesHelper(current_selection),

@@ -130,37 +130,6 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     """
     Plugin Tests:
     """
-    def test_copy_selection_to_buffer(self):
-        """
-        Validates if stuff in the view gets copied correctly when
-        a user triggers a `clipboard_diff_copy` command
-        """
-        self.insertTextToTestView(self.test_lines_0)
-        self.runSimpleViewCommand("select_all")
-        
-        previous_selection = self.test_view.sel()
-        self.runSimpleViewCommand("clipboard_diff_copy")
-        current_selection = self.test_view.sel()
-        
-        self.assertEqual(self.test_view.sel(), previous_selection)
-        self.assertEqual(self.test_lines_0, clipboard_diff.getCurrentBuffer())
-        
-    def test_cut_selection_to_buffer(self):
-        """
-        Validates if stuff in the view gets copied correctly when
-        a user triggers a `clipboard_diff_cut` command
-        """
-        self.insertTextToTestView(self.test_lines_0)
-        self.runSimpleViewCommand("select_all")
-        
-        previous_selection = self.test_view.sel()
-        self.runSimpleViewCommand("clipboard_diff_cut")
-        current_selection = self.test_view.sel()
-
-        self.assertEqual(1, len(current_selection))
-        self.assertEqual("", self.test_view.substr(current_selection[0]))
-        self.assertEqual(self.test_lines_0, clipboard_diff.getCurrentBuffer())
-
     def test_clipboard_diff(self):
         """
         Validates the `clipboard_diff` command 
