@@ -71,6 +71,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.test_view.set_name("Test View")
         self.test_view.set_scratch(True)
 
+
     def tearDown(self):
         """
         Common tearDown() for TestSelectionDiffPlugin
@@ -78,8 +79,8 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         if self.test_view:
             test_window = self.test_view.window()
             test_window.focus_view(self.test_view)
-            test_window.run_command("close_file"),
-
+            test_window.run_command("close_file")
+            
 
     """
     Helper Function Tests:
@@ -106,18 +107,25 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.assertEqual(lines[1], "line 1\n")
         self.assertEqual(lines[2], "line 2\n")
 
-    def test_write_to_view(self):
-        """
-        Validates writing to a view
-        """
-        lines = clipboard_diff.getLinesHelper(self.test_lines_0)
-        clipboard_diff.writeLinesToViewHelper(self.test_view, lines)
+    if version < "3000":
+        def test_write_to_view(self):
+            """
+            Validates writing to a view
 
-        self.runSimpleViewCommand("select_all")
-        current_selection = self.test_view.sel()
-        selected_text = clipboard_diff.selectionToString(self.test_view)
+            This is limited to < ST3 because the edit object is only
+            passed into the TextCommand, and view.begin_edit() does 
+            not exist anymore.
+            """
+            lines = clipboard_diff.getLinesHelper(self.test_lines_0)
+            edit = self.test_view.begin_edit()
+            clipboard_diff.writeLinesToViewHelper(self.test_view, edit, lines)
+            self.test_view.end_edit(edit)
 
-        self.assertEqual(self.test_lines_0, selected_text)
+            self.runSimpleViewCommand("select_all")
+            current_selection = self.test_view.sel()
+            selected_text = clipboard_diff.selectionToString(self.test_view)
+
+            self.assertEqual(self.test_lines_0 + "\n", selected_text)
 
     """
     Plugin Tests:

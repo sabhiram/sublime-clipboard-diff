@@ -62,12 +62,12 @@ def selectionToString(view):
     """
     return _reduce(lambda acc, r : acc + view.substr(r), view.sel(), "")
 
-def getLinesHelper(line):
+def getLinesHelper(s):
     """
     Given a buffer of text, splits it into the appropriate lines while
     maintaining the line break per line
     """
-    all_lines = [l for l in line.split("\n")]
+    all_lines = [l for l in s.split("\n")]
     lines = [l + "\n" for l in all_lines]
     return lines
 
