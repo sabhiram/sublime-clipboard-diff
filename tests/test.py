@@ -22,7 +22,8 @@ else:
 
 
 """
-Python 2 vs Python 3 - Compatibility - reduce() is functools.reduce
+Python 2 vs Python 3 - Compatibility:
+  * reduce() is functools.reduce
 """
 try:
     # Python 2
@@ -31,6 +32,7 @@ except NameError:
     # Python 3
     import functools
     _reduce = functools.reduce
+
 
 class TestSelectionDiffPlugin(unittest.TestCase):
     """
@@ -45,7 +47,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
                         "Clipboard", "Selection")
 
     expected_diff_text = _reduce(lambda acc, x: acc + x, diff_result, "")
-    
+
 
     """
     Helper functions
@@ -57,15 +59,13 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     def insertTextToTestView(self, text):
         self.test_view.run_command("insert", {"characters": text})
 
+
     """
     Setup / Teardown
     """
     def setUp(self):
         """
         Common setUp() for TestSelectionDiffPlugin
-
-        1. Open a new view in the active window
-        2. 
         """
         self.test_view = sublime.active_window().new_file()
         self.test_view.set_name("Test View")
@@ -74,32 +74,19 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     def tearDown(self):
         """
         Common tearDown() for TestSelectionDiffPlugin
-
-        1. If the view exists, set it to scratch (so it does not ask to save)
-        2. Focus the test_view, and close it
         """
         if self.test_view:
             test_window = self.test_view.window()
             test_window.focus_view(self.test_view)
             test_window.run_command("close_file"),
-            
+
 
     """
-    Tests:
-    
-    1. Test selected text -> string function
-    2. Test line helper 
-    3. Test line writer to view
-    4. Test Copy Hook
-    5. Test Cut Hook
-    6. Test Select-Diff Hook
+    Helper Function Tests:
     """
     def test_get_selection_str(self):
         """
         Validate the selectionToString helper
-
-        1. Inserts the view with some text and selects it
-        2. calls helper and validates that the two strings match
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
@@ -107,7 +94,6 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         selection_txt = clipboard_diff.selectionToString(self.test_view)
 
         self.assertEqual(self.test_lines_0, selection_txt)
-
 
     def test_line_helper(self):
         """
@@ -120,32 +106,26 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.assertEqual(lines[1], "line 1\n")
         self.assertEqual(lines[2], "line 2\n")
 
-
     def test_write_to_view(self):
         """
         Validates writing to a view
         """
         lines = clipboard_diff.getLinesHelper(self.test_lines_0)
-
-        # TODO: Enable this once we figure out how to pass mock "edit" objects
-        # clipboard_diff.writeLinesToViewHelper(self.test_view, { "edit_token": 0 }, lines)
+        clipboard_diff.writeLinesToViewHelper(self.test_view, lines)
 
         self.runSimpleViewCommand("select_all")
         current_selection = self.test_view.sel()
         selected_text = clipboard_diff.selectionToString(self.test_view)
 
-        # TODO: Enable this once we figure out how to pass mock "edit" objects
-        # self.assertEqual(self.test_lines_0, selected_text)
+        self.assertEqual(self.test_lines_0, selected_text)
 
-
+    """
+    Plugin Tests:
+    """
     def test_copy_selection_to_buffer(self):
         """
-        Validates if stuff in the view gets copied correctly
-
-        1. Fill up the file with some text and select it
-        2. Trigger a copy
-        3. Validate that the copied_lines stored off has these lines
-        4. Validate that the selection still exists
+        Validates if stuff in the view gets copied correctly when
+        a user triggers a `clipboard_diff_copy` command
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
@@ -157,15 +137,10 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.assertEqual(self.test_view.sel(), previous_selection)
         self.assertEqual(self.test_lines_0, clipboard_diff.getCurrentBuffer())
         
-
     def test_cut_selection_to_buffer(self):
         """
-        Validates if stuff in the view gets cut correctly
-
-        1. Fill up the file with some text and select it
-        2. Trigger a cut
-        3. Validate that the copied_lines stored off has these lines
-        4. Validate that the selection still exists
+        Validates if stuff in the view gets copied correctly when
+        a user triggers a `clipboard_diff_cut` command
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
@@ -178,14 +153,9 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.assertEqual("", self.test_view.substr(current_selection[0]))
         self.assertEqual(self.test_lines_0, clipboard_diff.getCurrentBuffer())
 
-
     def test_clipboard_diff(self):
         """
         Validates the `clipboard_diff` command 
-
-        1. Fill up a selection buffer
-        2. Select some other stuff
-        3. Diff them and check for match
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
