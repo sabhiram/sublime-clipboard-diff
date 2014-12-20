@@ -3,6 +3,20 @@
 
 SublimeText plugin to diff your clipboard against the current selection
 
+![](https://raw.githubusercontent.com/sabhiram/public-images/master/sublime-clipboard-diff/sublime-clipboard-diff.gif)
+
+## Usage:
+
+1. Copy something to the clipboard
+2. Select something you want to compare the clipboard to
+3. Press:
+
+|    OS   | Key Combination           |
+| ------- | ---------------           |
+| Linux   | ctrl + alt + D            |
+| Mac     | super(⌘) + alt + ctrl + D |
+| Windows | ctrl + alt + D            |
+
 ## Installation
 
 Currently only the manual install is supported. Hopefully I can add this to package control soon
@@ -11,7 +25,7 @@ Currently only the manual install is supported. Hopefully I can add this to pack
 
 From SublimeText `Packages` folder:
 ```sh
-git clone git@github.com:sabhiram/sublime-clipboard-diff.git sublime-clipboard-diff
+git clone git@github.com:sabhiram/sublime-clipboard-diff.git clipboard-diff
 ```
 
 ### ... for Contributors
@@ -20,8 +34,8 @@ Some folks prefer to clone the git repo right into their SublimeText `Packages` 
 
 ```sh
 cd ~/dev
-git clone git@github.com:sabhiram/sublime-clipboard-diff.git sublime-clipboard-diff
-ln -s sublime-clipboard-diff ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/sublime-clipboard-diff
+git clone git@github.com:sabhiram/sublime-clipboard-diff.git clipboard-diff
+ln -s clipboard-diff ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/clipboard-diff
 ```
 
 ### Package Control Install (Not yet supported...)
@@ -30,7 +44,10 @@ If you have [Package Control](https://sublime.wbond.net/installation) installed,
 
 ## Settings & Default Key Mapping
 
-Arriving post haste...
+There is only one configurable command for this plugin, and it invokes a diff between your clipboard and the current selection.
+
+
+
 
 ## Running Tests & CI
 
@@ -42,7 +59,7 @@ Next make sure you have [Package Control](https://sublime.wbond.net/installation
 
 Via the SublimeText Package Control, install the `UnitTesting` package. You can do this by hitting `ctrl + shift + p`, then select `Package Control: Install Package`. Once the menu loads, choose the `UnitTesting` package.
 
-To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project test suite` and type in the name of this package (in my case, and typically `sublime-clipboard-diff`).
+To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project test suite` and type in the name of this package (in my case, and typically `sublime-clipboard-diff` but is basically the name of the folder which you chose to clone the repo into).
 
 ## TODO
 

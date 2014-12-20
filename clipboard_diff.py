@@ -70,7 +70,7 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
         current_window = self.view.window()
         diff_view = current_window.new_file()
         diff_view.set_scratch(True)
-        diff_view.set_name("Select Diff")
+        diff_view.set_name("Clipboard Diff")
         current_window.focus_view(diff_view)
 
         current_selection = selectionToString(self.view)
