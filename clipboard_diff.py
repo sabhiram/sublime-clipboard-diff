@@ -3,6 +3,7 @@
 import sublime
 import sublime_plugin
 
+import os
 import difflib
 
 
@@ -62,16 +63,18 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
     """
     def run(self, edit):
         """
-        1. Fetch the current selection
-        2. Fetch the clipboard
-        3. Use difflib to compare them
-        4. Output this to a new tab (scratch)
+        1. Add a diff view to the window (scratch)
+        2. Set its properties (name / syntax etc)
+        3. Fetch the current selection and the clipboard
+        4. Use difflib to compare them
+        5. Write the diff to the view
         """
         current_window = self.view.window()
         diff_view = current_window.new_file()
         diff_view.set_scratch(True)
+        
         diff_view.set_name("Clipboard Diff")
-        current_window.focus_view(diff_view)
+        diff_view.set_syntax_file("Packages/Diff/Diff.tmLanguage")
 
         current_selection = selectionToString(self.view)
         previous_selection = sublime.get_clipboard()
@@ -82,3 +85,4 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
                     "Clipboard", "Selection")
 
         writeLinesToViewHelper(diff_view, edit, diff, index = 0)
+        current_window.focus_view(diff_view)

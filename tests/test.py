@@ -130,6 +130,17 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     """
     Plugin Tests:
     """
+    def test_clipboard_diff_view_syntax(self):
+        """
+        Validates that the newly opened tab is of the `Diff` syntax
+        """
+        self.runSimpleViewCommand("clipboard_diff")
+
+        diff_view = sublime.active_window().active_view()
+        diff_syntax = diff_view.settings().get('syntax')
+
+        self.assertEqual("Packages/Diff/Diff.tmLanguage", diff_syntax)
+
     def test_clipboard_diff(self):
         """
         Validates the `clipboard_diff` command 
