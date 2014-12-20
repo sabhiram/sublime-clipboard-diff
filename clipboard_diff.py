@@ -84,5 +84,5 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
                     getLinesHelper(current_selection),
                     "Clipboard", "Selection")
 
-        writeLinesToViewHelper(diff_view, edit, diff, index = 0)
         current_window.focus_view(diff_view)
+        writeLinesToViewHelper(diff_view, edit, diff, index = 0)

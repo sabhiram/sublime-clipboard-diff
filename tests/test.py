@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import unittest
+import sys, os, time
 import difflib
-import sys, os, sublime
+import unittest
+
+import sublime
 
 
 """
@@ -107,6 +109,9 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.assertEqual(lines[2], "line 2\n")
 
     if version < "3000":
+        """
+        Tests ST2 only stuff
+        """
         def test_write_to_view(self):
             """
             Validates writing to a view
@@ -126,21 +131,26 @@ class TestSelectionDiffPlugin(unittest.TestCase):
 
             self.assertEqual(self.test_lines_0 + "\n", selected_text)
 
+    else:
+        """
+        > ST 2 Tests
+        """
+        def test_clipboard_diff_view_syntax(self):
+            """
+            Validates that the newly opened tab is of the `Diff` syntax
+            """
+            self.runSimpleViewCommand("clipboard_diff")
+
+            diff_view = sublime.active_window().active_view()
+            diff_syntax = diff_view.settings().get('syntax')
+            diff_view.window().run_command("close_file")
+
+            self.assertEqual("Packages/Diff/Diff.tmLanguage", diff_syntax)
+
 
     """
     Plugin Tests:
     """
-    def test_clipboard_diff_view_syntax(self):
-        """
-        Validates that the newly opened tab is of the `Diff` syntax
-        """
-        self.runSimpleViewCommand("clipboard_diff")
-
-        diff_view = sublime.active_window().active_view()
-        diff_syntax = diff_view.settings().get('syntax')
-
-        self.assertEqual("Packages/Diff/Diff.tmLanguage", diff_syntax)
-
     def test_clipboard_diff(self):
         """
         Validates the `clipboard_diff` command 
