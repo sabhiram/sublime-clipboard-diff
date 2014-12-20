@@ -76,10 +76,9 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         """
         Common tearDown() for TestSelectionDiffPlugin
         """
-        if self.test_view:
-            test_window = self.test_view.window()
-            test_window.focus_view(self.test_view)
-            test_window.run_command("close_file")
+        test_window = self.test_view.window()
+        test_window.focus_view(self.test_view)
+        test_window.run_command("close_file")
             
 
     """
@@ -127,6 +126,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
 
             self.assertEqual(self.test_lines_0 + "\n", selected_text)
 
+
     """
     Plugin Tests:
     """
@@ -136,7 +136,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
-        self.runSimpleViewCommand("clipboard_diff_cut")
+        self.runSimpleViewCommand("cut")
         self.insertTextToTestView(self.test_lines_1)
         self.runSimpleViewCommand("select_all")
 
@@ -146,3 +146,19 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         diff_view.window().run_command("close_file")
 
         self.assertEqual(self.expected_diff_text, diff_text)
+
+    def test_clipboard_diff_same_selection(self):
+        """
+        Validates the `clipboard_diff` command when run 
+        with the same selection
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runSimpleViewCommand("select_all")
+        self.runSimpleViewCommand("copy")
+
+        self.runSimpleViewCommand("clipboard_diff")
+        diff_view = sublime.active_window().active_view()
+        diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
+        diff_view.window().run_command("close_file")
+
+        self.assertEqual("", diff_text)
