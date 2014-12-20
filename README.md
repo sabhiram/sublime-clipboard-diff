@@ -46,9 +46,6 @@ If you have [Package Control](https://sublime.wbond.net/installation) installed,
 
 There is only one configurable command for this plugin, and it invokes a diff between your clipboard and the current selection.
 
-
-
-
 ## Running Tests & CI
 
 This project, and any pull requests will automatically be run against Travis CI. For local development, the test assume the following are installed and configured:
