@@ -1,0 +1,41 @@
+{
+    /***********************************************************************\
+    Setting Name: `diff_type`
+
+    Default Value: `unified`
+
+    Description:
+        Setting the `diff_type` will allow the user to toggle the type
+        of diff used in Clipboard Diff
+
+        Here is a list of supported types as of now:
+
+        1. [Default] unified - Uses difflib.unified_diff(...)
+        2.           context - Uses difflib.context_diff(...)
+    \***********************************************************************/
+    "diff_type": "unified",
+
+    /***********************************************************************\
+    Setting Name: `clipboard_file_name`
+
+    Default Value: `Clipboard`
+
+    Description:
+        Setting the `clipboard_file_name` will allow the user to change the
+        file name which shows up when the diff is run for the Clipboard
+        contents.
+    \***********************************************************************/
+    "clipboard_file_name": "Clipboard",
+
+    /***********************************************************************\
+    Setting Name: `selection_file_name`
+
+    Default Value: `Selection`
+
+    Description:
+        Setting the `selection_file_name` will allow the user to change the
+        file name which shows up when the diff is run for the Selection
+        contents.
+    \***********************************************************************/
+    "selection_file_name": "Selection"
+}

@@ -34,7 +34,62 @@ git clone git@github.com:sabhiram/sublime-clipboard-diff.git clipboard-diff
 
 ## Settings & Default Key Mapping
 
-There is only one configurable command for this plugin, and it invokes a diff between your clipboard and the current selection.
+Here is a list of settings exposed by Clipboard Diff:
+
+```json
+    /***********************************************************************\
+    Setting Name: `diff_type`
+
+    Default Value: `unified`
+
+    Description:
+        Setting the `diff_type` will allow the user to toggle the type
+        of diff used in Clipboard Diff
+
+        Here is a list of supported types as of now:
+
+        1. [Default] unified - Uses difflib.unified_diff(...)
+        2.           context - Uses difflib.context_diff(...)
+    \***********************************************************************/
+    "diff_type": "unified",
+
+    /***********************************************************************\
+    Setting Name: `clipboard_file_name`
+
+    Default Value: `Clipboard`
+
+    Description:
+        Setting the `clipboard_file_name` will allow the user to change the
+        file name which shows up when the diff is run for the Clipboard
+        contents.
+    \***********************************************************************/
+    "clipboard_file_name": "Clipboard",
+
+    /***********************************************************************\
+    Setting Name: `selection_file_name`
+
+    Default Value: `Selection`
+
+    Description:
+        Setting the `selection_file_name` will allow the user to change the
+        file name which shows up when the diff is run for the Selection
+        contents.
+    \***********************************************************************/
+    "selection_file_name": "Selection"
+```
+
+To override any of these settings, simply create a file called `clipboard_diff.sublime-settings` in the `Packages\User` folder. Here is a sample:
+
+```sh
+more ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/clipboard_diff.sublime-settings 
+{
+    "diff_type": "context",
+    "clipboard_file_name": "Clipboard contents",
+    "selection_file_name": "Selected stuff..."
+}
+```
+
+In the above User file, I have overwritten the names which will be displayed when a diff is computed for the source and destination. As well as change the diff type to a `difflib.context_diff` as opposed to the default `difflib.unified_diff`
 
 ## Developers
 
@@ -68,6 +123,26 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 [Sublime Text 2 API](https://www.sublimetext.com/docs/2/api_reference.html)
 
 [Sublime Text 3 API](https://www.sublimetext.com/docs/3/api_reference.html)
+
+## Versions Released
+
+#### 1.0.0 - Initial Release
+
+1. Implements basic diff feature
+2. Adds simple tests for plugin functionality
+3. Ready for package control deployment
+
+#### 1.1.0 - Current Release
+
+1. Adds syntax highlighting to diff output view
+2. Exposes settings to change `diff_type` and source / destination file names
+3. Small bugfixes in helper functions which were never tested
+4. More tests to validate the above
+
+#### 1.2.0 - Future Release
+
+1. Add external diff tool
+2. <What would you like to see?>
 
 ## TODO
 

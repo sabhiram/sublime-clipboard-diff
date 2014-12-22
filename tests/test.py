@@ -43,17 +43,18 @@ class TestSelectionDiffPlugin(unittest.TestCase):
 
     test_lines_0 = "line 0\nline 1\nline 2"
     test_lines_1 = "line A\nline 1"
-    diff_result  = difflib.unified_diff(
-                        clipboard_diff.getLinesHelper(test_lines_0),
-                        clipboard_diff.getLinesHelper(test_lines_1),
-                        "Clipboard", "Selection")
-
-    expected_diff_text = _reduce(lambda acc, x: acc + x, diff_result, "")
 
 
     """
     Helper functions
     """
+    def getDiffExpectedResult(self, diff_fn, str_a, str_b, file_a, file_b):
+        result = diff_fn(
+                    clipboard_diff.getLinesHelper(str_a),
+                    clipboard_diff.getLinesHelper(str_b),
+                    file_a, file_b)
+        return _reduce(lambda acc, x: acc + x, result, "")
+
     def runSimpleViewCommand(self, cmd):
         if self.test_view:
             self.test_view.run_command(cmd)
@@ -73,6 +74,8 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         self.test_view.set_name("Test View")
         self.test_view.set_scratch(True)
 
+        self.settings = sublime.load_settings("clipboard_diff.sublime-settings")
+
 
     def tearDown(self):
         """
@@ -81,7 +84,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         test_window = self.test_view.window()
         test_window.focus_view(self.test_view)
         test_window.run_command("close_file")
-            
+
 
     """
     Helper Function Tests:
@@ -117,7 +120,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
             Validates writing to a view
 
             This is limited to < ST3 because the edit object is only
-            passed into the TextCommand, and view.begin_edit() does 
+            passed into the TextCommand, and view.begin_edit() does
             not exist anymore.
             """
             lines = clipboard_diff.getLinesHelper(self.test_lines_0)
@@ -151,9 +154,9 @@ class TestSelectionDiffPlugin(unittest.TestCase):
     """
     Plugin Tests:
     """
-    def test_clipboard_diff(self):
+    def test_clipboard_unified_diff(self):
         """
-        Validates the `clipboard_diff` command 
+        Validates the `clipboard_diff` command
         """
         self.insertTextToTestView(self.test_lines_0)
         self.runSimpleViewCommand("select_all")
@@ -166,11 +169,14 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
         diff_view.window().run_command("close_file")
 
-        self.assertEqual(self.expected_diff_text, diff_text)
+        expected_diff_text = self.getDiffExpectedResult(difflib.unified_diff,
+                                    self.test_lines_0, self.test_lines_1,
+                                    "Clipboard", "Selection")
+        self.assertEqual(expected_diff_text, diff_text)
 
-    def test_clipboard_diff_same_selection(self):
+    def test_clipboard_unified_diff_same_selection(self):
         """
-        Validates the `clipboard_diff` command when run 
+        Validates the `clipboard_diff` command when run
         with the same selection
         """
         self.insertTextToTestView(self.test_lines_0)
@@ -183,3 +189,59 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         diff_view.window().run_command("close_file")
 
         self.assertEqual("", diff_text)
+
+    def test_clipboard_context_diff(self):
+        """
+        Validates that we can change the diff type to context
+        diff (from difflib)
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runSimpleViewCommand("select_all")
+        self.runSimpleViewCommand("cut")
+        self.insertTextToTestView(self.test_lines_1)
+        self.runSimpleViewCommand("select_all")
+
+        old_type = self.settings.get("diff_type")
+        self.settings.set("diff_type", "context")
+        self.runSimpleViewCommand("clipboard_diff")
+        self.settings.set("diff_type", old_type)
+
+        diff_view = sublime.active_window().active_view()
+        diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
+        diff_view.window().run_command("close_file")
+
+        expected_diff_text = self.getDiffExpectedResult(difflib.context_diff,
+                                    self.test_lines_0, self.test_lines_1,
+                                    "Clipboard", "Selection")
+        self.assertEqual(expected_diff_text, diff_text)
+
+    def test_clipboard_setting_file_names(self):
+        """
+        Validates that clipboard_file_name and selection_file_name
+        can be set to success
+        """
+        self.insertTextToTestView(self.test_lines_0)
+        self.runSimpleViewCommand("select_all")
+        self.runSimpleViewCommand("cut")
+        self.insertTextToTestView(self.test_lines_1)
+        self.runSimpleViewCommand("select_all")
+
+        old_clipboard_file_name = self.settings.get("clipboard_file_name")
+        old_selection_file_name = self.settings.get("selection_file_name")
+        self.settings.set("clipboard_file_name", "CLIPBOARD IS FUN")
+        self.settings.set("selection_file_name", "SELECTION IS BETTER")
+        self.runSimpleViewCommand("clipboard_diff")
+        self.settings.set("clipboard_file_name", old_clipboard_file_name)
+        self.settings.set("selection_file_name", old_selection_file_name)
+
+        diff_view = sublime.active_window().active_view()
+        diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
+        diff_view.window().run_command("close_file")
+
+
+        expected_diff_text = self.getDiffExpectedResult(difflib.unified_diff,
+                                    self.test_lines_0, self.test_lines_1,
+                                    "CLIPBOARD IS FUN", "SELECTION IS BETTER")
+        self.assertEqual(expected_diff_text, diff_text)
+
+
