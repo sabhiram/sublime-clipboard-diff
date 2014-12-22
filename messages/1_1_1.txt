@@ -10,25 +10,7 @@
 
 Github - https://github.com/sabhiram/sublime-clipboard-diff
 
-Thank you for installing Clipboard Diff! 
-
-Usage is as follows:
-1. Copy some text
-2. Select some other text
-3. Press [super +] ctrl + alt + D
-
-You may customize the diff to some level, the current options exposed
-are the following (add "clipboard_diff.sublime-settings" to your 
-\Packages\User folder)
-
-    Default diff_type is unified, you can set it to "context" as well
-    "diff_type": "unified"
-
-    These file names correspond to the source / destination files referenced
-    in the diff output view
-    "clipboard_file_name": "Clipboard"
-    "selection_file_name": "Selection"
-
+Thank you for updating Clipboard Diff! Here are the recent changes:
 
 Version 1.1.1 
 ✔ Minor update: add package control messages
