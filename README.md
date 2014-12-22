@@ -37,6 +37,7 @@ git clone git@github.com:sabhiram/sublime-clipboard-diff.git sublime-clipboard-d
 Here is a list of settings exposed by Clipboard Diff:
 
 ```javascript
+    
     // Setting the `diff_type` will allow the user to toggle the type
     // of diff used in Clipboard Diff
     // 
