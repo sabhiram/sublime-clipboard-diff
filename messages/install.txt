@@ -1,0 +1,40 @@
+
+    
+
+  _____ __ _        __                      __  ___   _  ___ ___
+ / ___// /(_)___   / /  ___  ___ _ ____ ___/ / / _ \ (_)/ _// _/
+/ /__ / // // _ \ / _ \/ _ \/ _ `// __// _  / / // // // _// _/ 
+\___//_//_// .__//_.__/\___/\_,_//_/   \_,_/ /____//_//_/ /_/   
+          /_/                                                                  
+
+
+Github - https://github.com/sabhiram/sublime-clipboard-diff
+
+Thank you for installing Clipboard Diff! 
+
+Usage is as follows:
+1. Copy some text
+2. Select some other text
+3. Press [super +] ctrl + alt + D
+
+You may customize the diff to some level, the current options exposed
+are the following (add "clipboard_diff.sublime-settings" to your 
+\Packages\User folder)
+
+    Default diff_type is unified, you can set it to "context" as well
+    "diff_type": "unified"
+
+    These file names correspond to the source / destination files referenced
+    in the diff output view
+    "clipboard_file_name": "Clipboard"
+    "selection_file_name": "Selection"
+
+Version 1.1.0
+✔ Adds syntax highlighting to diff output view
+✔ Exposes settings to change `diff_type` and source / destination file names
+✔ Small bugfixes in helper functions which were never tested
+
+Version 1.0.0
+✔ Implements basic diff feature
+✔ Adds simple tests for plugin functionality
+✔ Ready for package control deployment
