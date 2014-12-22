@@ -142,7 +142,7 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 #### 1.2.0 - Future Release
 
 1. Add external diff tool
-2. <What would you like to see?>
+2. ... What would **you** like to see?
 
 ## TODO
 
