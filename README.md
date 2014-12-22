@@ -108,21 +108,21 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 
 #### 1.0.0 - Initial Release
 
-✔ Implements basic diff feature
-✔ Adds simple tests for plugin functionality
-✔ Ready for package control deployment
+1. Implements basic diff feature
+2. Adds simple tests for plugin functionality
+3. Ready for package control deployment
 
 #### 1.1.0 - Current Release
 
-✔ Adds syntax highlighting to diff output view
-✔ Exposes settings to change `diff_type` and source / destination file names
-✔ Small bugfixes in helper functions which were never tested
-✔ More tests to validate the above
+1. Adds syntax highlighting to diff output view
+2. Exposes settings to change `diff_type` and source / destination file names
+3. Small bugfixes in helper functions which were never tested
+4. More tests to validate the above
 
 #### 1.2.0 - Future Release
 
-✔ Add external diff tool
-✔ ... What would **you** like to see?
+1. Add external diff tool
+2. ... What would **you** like to see?
 
 ## TODO
 
