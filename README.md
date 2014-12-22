@@ -29,52 +29,31 @@ If you have [Package Control](https://sublime.wbond.net/installation) installed,
 
 From SublimeText `Packages` folder:
 ```sh
-git clone git@github.com:sabhiram/sublime-clipboard-diff.git clipboard-diff
+git clone git@github.com:sabhiram/sublime-clipboard-diff.git sublime-clipboard-diff
 ```
 
 ## Settings & Default Key Mapping
 
 Here is a list of settings exposed by Clipboard Diff:
 
-```json
-    /***********************************************************************\
-    Setting Name: `diff_type`
-
-    Default Value: `unified`
-
-    Description:
-        Setting the `diff_type` will allow the user to toggle the type
-        of diff used in Clipboard Diff
-
-        Here is a list of supported types as of now:
-
-        1. [Default] unified - Uses difflib.unified_diff(...)
-        2.           context - Uses difflib.context_diff(...)
-    \***********************************************************************/
+```javascript
+    // Setting the `diff_type` will allow the user to toggle the type
+    // of diff used in Clipboard Diff
+    // 
+    // Here is a list of supported types as of now:
+    // 
+    // 1. [Default] unified - Uses difflib.unified_diff(...)
+    // 2.           context - Uses difflib.context_diff(...)
     "diff_type": "unified",
 
-    /***********************************************************************\
-    Setting Name: `clipboard_file_name`
-
-    Default Value: `Clipboard`
-
-    Description:
-        Setting the `clipboard_file_name` will allow the user to change the
-        file name which shows up when the diff is run for the Clipboard
-        contents.
-    \***********************************************************************/
+    // Setting the `clipboard_file_name` will allow the user to change the
+    // file name which shows up when the diff is run for the Clipboard
+    // contents.
     "clipboard_file_name": "Clipboard",
 
-    /***********************************************************************\
-    Setting Name: `selection_file_name`
-
-    Default Value: `Selection`
-
-    Description:
-        Setting the `selection_file_name` will allow the user to change the
-        file name which shows up when the diff is run for the Selection
-        contents.
-    \***********************************************************************/
+    // Setting the `selection_file_name` will allow the user to change the
+    // file name which shows up when the diff is run for the Selection
+    // contents.
     "selection_file_name": "Selection"
 ```
 
@@ -89,7 +68,7 @@ more ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/clipboard_dif
 }
 ```
 
-In the above User file, I have overwritten the names which will be displayed when a diff is computed for the source and destination. As well as change the diff type to a `difflib.context_diff` as opposed to the default `difflib.unified_diff`
+The above User specific setting file file overrides the file names which will be displayed when a diff is computed. It also changes the `diff_type` to a `difflib.context_diff` as opposed to the default `difflib.unified_diff`
 
 ## Developers
 
