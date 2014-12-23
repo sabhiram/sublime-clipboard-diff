@@ -29,8 +29,7 @@ are the following (add "clipboard_diff.sublime-settings" to your
     "clipboard_file_name": "Clipboard"
     "selection_file_name": "Selection"
 
-
-Version 1.1.1 
+Version 1.1.2
 ✔ Minor update: add package control messages
 ✔ Prettify the plugin settings in the readme 
 

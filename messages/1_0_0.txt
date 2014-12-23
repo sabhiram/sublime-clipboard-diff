@@ -1,0 +1,4 @@
+Version 1.0.0
+✔ Implements basic diff feature
+✔ Adds simple tests for plugin functionality
+✔ Ready for package control deployment

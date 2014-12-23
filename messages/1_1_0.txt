@@ -1,23 +1,7 @@
-
-    
-
-  _____ __ _        __                      __  ___   _  ___ ___
- / ___// /(_)___   / /  ___  ___ _ ____ ___/ / / _ \ (_)/ _// _/
-/ /__ / // // _ \ / _ \/ _ \/ _ `// __// _  / / // // // _// _/ 
-\___//_//_// .__//_.__/\___/\_,_//_/   \_,_/ /____//_//_/ /_/   
-          /_/                                                                  
-
-
-Github - https://github.com/sabhiram/sublime-clipboard-diff
-
-Thank you for updating Clipboard Diff! Here are the recent changes:
+Version 1.1.1
+✔ Minor bugfix with diff output view
 
 Version 1.1.0
 ✔ Adds syntax highlighting to diff output view
 ✔ Exposes settings to change `diff_type` and source / destination file names
 ✔ Small bugfixes in helper functions which were never tested
-
-Version 1.0.0
-✔ Implements basic diff feature
-✔ Adds simple tests for plugin functionality
-✔ Ready for package control deployment

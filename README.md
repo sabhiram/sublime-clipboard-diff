@@ -69,7 +69,7 @@ more ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/clipboard_dif
 }
 ```
 
-The above User specific setting file file overrides the file names which will be displayed when a diff is computed. It also changes the `diff_type` to a `difflib.context_diff` as opposed to the default `difflib.unified_diff`
+The above User specific setting file overrides the names which will be displayed when a diff is computed. It also demonstrates how we can change the `diff_type` to a `difflib.context_diff` as opposed to the default `difflib.unified_diff`
 
 ## Developers
 
@@ -88,11 +88,11 @@ ln -s sublime-clipboard-diff ~/Library/Application\ Support/Sublime\ Text\ 3/Pac
 
 ### Running Tests & CI
 
-This project, and any pull requests will automatically be run against Travis CI. For local development, the test assume the following are installed and configured:
-
+This project, and any pull requests will automatically be run against Travis CI. For local development, the tests assume that the following are installed and configured:
+    
 Hopefully you have [Sublime Text](http://www.sublimetext.com/3) installed
 
-Next make sure you have [Package Control](https://sublime.wbond.net/installation) installed as well (and you really should, its awesome!)
+Next make sure you have [Package Control](https://sublime.wbond.net/installation) installed as well (and you really should, it's awesome!)
 
 Via the SublimeText Package Control, install the `UnitTesting` package. You can do this by hitting `ctrl + shift + p`, then select `Package Control: Install Package`. Once the menu loads, choose the `UnitTesting` package.
 
@@ -106,11 +106,10 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 
 ## Versions Released
 
-#### 1.0.0 - Initial Release
+#### 1.2.0 - Future Release
 
-1. Implements basic diff feature
-2. Adds simple tests for plugin functionality
-3. Ready for package control deployment
+1. Add external diff tool
+2. ... What would **you** like to see?
 
 #### 1.1.0 - Current Release
 
@@ -119,13 +118,8 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 3. Small bugfixes in helper functions which were never tested
 4. More tests to validate the above
 
-#### 1.2.0 - Future Release
+#### 1.0.0 - Initial Release
 
-1. Add external diff tool
-2. ... What would **you** like to see?
-
-## TODO
-
-1. Document how we can go about binding a custom key to running tests for a particular package / plugin.
-
-2. Figure out how to hook up auto code coverage to this
+1. Implements basic diff feature
+2. Adds simple tests for plugin functionality
+3. Ready for package control deployment

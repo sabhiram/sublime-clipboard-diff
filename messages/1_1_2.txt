@@ -12,16 +12,6 @@ Github - https://github.com/sabhiram/sublime-clipboard-diff
 
 Thank you for updating Clipboard Diff! Here are the recent changes:
 
-Version 1.1.1 
+Version 1.1.2
 ✔ Minor update: add package control messages
-✔ Prettify the plugin settings in the readme 
-
-Version 1.1.0
-✔ Adds syntax highlighting to diff output view
-✔ Exposes settings to change `diff_type` and source / destination file names
-✔ Small bugfixes in helper functions which were never tested
-
-Version 1.0.0
-✔ Implements basic diff feature
-✔ Adds simple tests for plugin functionality
-✔ Ready for package control deployment
+✔ Prettify the plugin settings in the readme
