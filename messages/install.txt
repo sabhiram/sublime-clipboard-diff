@@ -33,6 +33,9 @@ Version 1.1.2
 ✔ Minor update: add package control messages
 ✔ Prettify the plugin settings in the readme 
 
+Version 1.1.1
+✔ Minor bugfix with diff output view
+
 Version 1.1.0
 ✔ Adds syntax highlighting to diff output view
 ✔ Exposes settings to change `diff_type` and source / destination file names
