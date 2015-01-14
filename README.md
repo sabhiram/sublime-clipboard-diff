@@ -5,7 +5,7 @@ SublimeText plugin to diff your clipboard against the current selection
 
 ![](https://raw.githubusercontent.com/sabhiram/public-images/master/sublime-clipboard-diff/sublime-clipboard-diff.gif)
 
-[Clipboard Diff on Package Control](https://packagecontrol.io/packages/Clipboard%20Diff)
+[Clipboard Diff](https://packagecontrol.io/packages/Clipboard%20Diff) on Package Control
 
 ## Usage:
 
