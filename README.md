@@ -19,6 +19,8 @@ SublimeText plugin to diff your clipboard against the current selection
 | Mac     | super(⌘) + alt + ctrl + D |
 | Windows | ctrl + alt + D            |
 
+You can also run it from the Command Palette (`ctrl + shift + P`) followed by `"Clipboard Diff"`. The same command is also available from the "Context Menu" (right clicking on a text area).
+
 ## Installation
 
 The easiest way to install `Clipboard Diff` is to install it from Package Control
@@ -113,7 +115,23 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 1. Add external diff tool
 2. ... What would **you** like to see?
 
-#### 1.1.0 - Current Release
+#### 1.1.3 - Current Release
+
+1. Adds Context menu item for "Clipboard Diff"
+2. Adds Command Palette entry for "Clipboard Diff"
+
+Thanks to @orschiro for your suggestion on adding a Palette entry!
+
+#### 1.1.2
+
+1. Minor update: add package control messages
+2. Prettify the plugin settings in the readme
+
+#### 1.1.1
+
+1. Minor bugfix with diff output view
+
+#### 1.1.0
 
 1. Adds syntax highlighting to diff output view
 2. Exposes settings to change `diff_type` and source / destination file names

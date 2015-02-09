@@ -1,0 +1,7 @@
+[
+    {
+        "id" : "saClipboardDiff",
+        "caption" : "Clipboard Diff",
+        "command" : "clipboard_diff"
+    }
+]
