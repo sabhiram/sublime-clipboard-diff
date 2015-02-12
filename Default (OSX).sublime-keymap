@@ -2,5 +2,9 @@
     {
         "keys": ["super+ctrl+alt+d"],
         "command": "clipboard_diff"
+    },
+    {
+        "keys": ["super+ctrl+alt+a"],
+        "command": "apply_diff_to_selection"
     }
 ]

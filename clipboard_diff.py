@@ -6,7 +6,6 @@ import sublime_plugin
 import os
 import difflib
 
-
 """
 Python 2 vs Python 3 - Compatibility - reduce() is functools.reduce
 """
@@ -84,14 +83,13 @@ def validateSettings():
         print("Settings updated - needs flush...")
         sublime.save_settings("clipboard_diff.sublime-settings")
 
-
 """
 Sublime commands that this plugin implements
 """
 class ClipboardDiffCommand(sublime_plugin.TextCommand):
     """
-    Fired when the select-diff key is triggered, will grab
-    the current selection, and open a new tab with a diff
+    Fired when the "clipboard-diff" command is triggered, will
+    grab the current selection, and open a new tab with a diff
     """
     def run(self, edit):
         """
@@ -128,3 +126,29 @@ class ClipboardDiffCommand(sublime_plugin.TextCommand):
 
         current_window.focus_view(diff_view)
         writeLinesToViewHelper(diff_view, edit, diff, index = 0)
+
+
+class ApplyDiffToSelectionCommand(sublime_plugin.TextCommand):
+    """
+    Fired when the "apply-diff" command is triggered, will grab
+    the current selection, and apply a diff to it (assuming that)
+    a diff hunk has been copied
+    """
+    def run(self, edit):
+        """
+        0. Validate any settings that might be set badly
+        1. Grab the selection
+        2. Apply diff from clipboard to the selection
+        3. Replace selection if it is applicable to the hunk
+        """
+        validateSettings()
+        print("Apply diff to selection called")
+
+        source_text = selectionToString(self.view)
+        diff_hunk   = sublime.get_clipboard()
+
+        print("Source:")
+        print(source_text)
+
+        print("\nHunk:")
+        print(diff_hunk)
