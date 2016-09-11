@@ -47,10 +47,15 @@ def getLinesHelper(s):
 def writeLinesToViewHelper(view, edit, lines, index=0):
     """
     Helper function to walk a list of lines and emit them to the given view
-    starting at the `index`. Default value of index is 0
+    starting at the `index`. Default value of index is 0.  If there is nothing
+    to put in the view - throw up a default message to say so.
     """
     for line in lines:
         index += view.insert(edit, index, line)
+
+    if index == 0:
+        index += view.insert(edit, index, "\n    Selection and Clipboard Match!\n")
+
     return index
 
 def validateSettings():

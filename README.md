@@ -29,7 +29,7 @@ The easiest way to install `Clipboard Diff` is to install it from Package Contro
 
 If you have [Package Control](https://sublime.wbond.net/installation) installed, then simply naviagte to `Package Control: Install Package` and select the `Clipboard Diff` plugin and you are done!
 
-### Manual Install 
+### Manual Install
 
 From SublimeText `Packages` folder:
 ```sh
@@ -41,12 +41,12 @@ git clone git@github.com:sabhiram/sublime-clipboard-diff.git sublime-clipboard-d
 Here is a list of settings exposed by Clipboard Diff:
 
 ```javascript
-    
+
     // Setting the `diff_type` will allow the user to toggle the type
     // of diff used in Clipboard Diff
-    // 
+    //
     // Here is a list of supported types as of now:
-    // 
+    //
     // 1. [Default] unified - Uses difflib.unified_diff(...)
     // 2.           context - Uses difflib.context_diff(...)
     "diff_type": "unified",
@@ -65,7 +65,7 @@ Here is a list of settings exposed by Clipboard Diff:
 To override any of these settings, simply create a file called `clipboard_diff.sublime-settings` in the `Packages\User` folder. Here is a sample:
 
 ```sh
-more ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/clipboard_diff.sublime-settings 
+more ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User/clipboard_diff.sublime-settings
 {
     "diff_type": "context",
     "clipboard_file_name": "Clipboard contents",
@@ -93,7 +93,7 @@ ln -s sublime-clipboard-diff ~/Library/Application\ Support/Sublime\ Text\ 3/Pac
 ### Running Tests & CI
 
 This project, and any pull requests will automatically be run against Travis CI. For local development, the tests assume that the following are installed and configured:
-    
+
 Hopefully you have [Sublime Text](http://www.sublimetext.com/3) installed
 
 Next make sure you have [Package Control](https://sublime.wbond.net/installation) installed as well (and you really should, it's awesome!)
@@ -115,12 +115,14 @@ To run the tests: `ctrl + shift + p` then select `UnitTesting: Run any project t
 1. Add external diff tool
 2. ... What would **you** like to see?
 
-#### 1.1.3 - Current Release
+#### 1.1.4 - Current Release
+
+1. Display appropriate message when the selection and clipboard match
+
+#### 1.1.3
 
 1. Adds Context menu item for "Clipboard Diff"
 2. Adds Command Palette entry for "Clipboard Diff"
-
-Thanks to @orschiro for your suggestion on adding a Palette entry!
 
 #### 1.1.2
 
