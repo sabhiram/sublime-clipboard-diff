@@ -188,7 +188,7 @@ class TestSelectionDiffPlugin(unittest.TestCase):
         diff_text = diff_view.substr(sublime.Region(0, diff_view.size()))
         diff_view.window().run_command("close_file")
 
-        self.assertEqual("", diff_text)
+        self.assertEqual("\n    Selection and Clipboard Match!\n", diff_text)
 
     def test_clipboard_context_diff(self):
         """
